@@ -49,3 +49,6 @@ function scrollRight() {
         behavior: "smooth"
     });
 }
+document.getElementById("bookNowButton").addEventListener("click", function() {
+    window.open("https://beyondtheblondee.glossgenius.com", "_blank", "width=800,height=600");
+});
