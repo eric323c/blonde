@@ -221,16 +221,23 @@ body {
     border: none;
     border-radius: 8px;
 }
+#header-title {
+  background-color: black; /* Keep the shortened black navbar effect */
+  padding: 10px; /* Adjust padding as needed */
+  display: inline-block; /* To fit the text size */
+  border-radius: 5px; /* Optional, for styling */
+}
 
 #header-title span {
   display: inline-block;
   transition: color 0.3s ease;
+  color: white; /* Default text color */
 }
 
 @keyframes flashColor {
-  0% { color: black; }
-  50% { color: #ff5733; } /* First color */
-  100% { color: black; }
+  0% { color: white; }
+  50% { color: #ff5733; } /* Flash color */
+  100% { color: white; }
 }
 
 .flash {
