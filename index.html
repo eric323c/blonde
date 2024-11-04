@@ -96,11 +96,18 @@
     <button class="gallery-arrow right-arrow" onclick="scrollRight()">&rsaquo;</button>
 </div>
 
-    <!-- Booking Section -->
 <div class="booking-section">
     <h2>Booking</h2>
     <p>Ready to book? Click below to reserve your spot!</p>
-    <button id="bookNowButton" class="book-now-btn">Book Now</button>
+    <button id="openModalButton" class="book-now-btn">Book Now</button>
+</div>
+
+<!-- Modal -->
+<div id="bookingModal" class="modal">
+    <div class="modal-content">
+        <span id="closeModalButton" class="close-button">&times;</span>
+        <iframe src="https://beyondtheblondee.glossgenius.com" frameborder="0" class="booking-iframe"></iframe>
+    </div>
 </div>
 
     <script src="script.js"></script>
