@@ -65,8 +65,11 @@ window.addEventListener("click", function(event) {
     }
 });
 document.getElementById("header-title").addEventListener("click", function() {
-  this.classList.add("bounce");
-  setTimeout(() => {
-    this.classList.remove("bounce");
-  }, 500);
+  const letters = this.querySelectorAll("span");
+  letters.forEach((letter, index) => {
+    setTimeout(() => {
+      letter.classList.add("flash");
+      setTimeout(() => letter.classList.remove("flash"), 500);
+    }, index * 100); // Staggered delay of 100ms per letter
+  });
 });
