@@ -64,3 +64,9 @@ window.addEventListener("click", function(event) {
         modal.style.display = "none";
     }
 });
+document.getElementById("header-title").addEventListener("click", function() {
+  this.classList.add("bounce");
+  setTimeout(() => {
+    this.classList.remove("bounce");
+  }, 500);
+});
