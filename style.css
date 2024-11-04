@@ -160,3 +160,21 @@ body {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
+.booking-section {
+    text-align: center;
+    padding: 40px;
+}
+
+.book-now-btn {
+    background-color: #222;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.book-now-btn:hover {
+    background-color: #444;
+}
