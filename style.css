@@ -221,21 +221,18 @@ body {
     border: none;
     border-radius: 8px;
 }
-#header-title {
+
+#header-title span {
   display: inline-block;
-  cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: color 0.3s ease;
 }
 
-@keyframes bounce {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
+@keyframes flashColor {
+  0% { color: black; }
+  50% { color: #ff5733; } /* First color */
+  100% { color: black; }
 }
 
-.bounce {
-  animation: bounce 0.5s ease;
+.flash {
+  animation: flashColor 0.5s ease;
 }
