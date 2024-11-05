@@ -33,24 +33,40 @@ sliders.forEach(slider => {
 // Gallery Infinite Scrolling
 const galleryGrid = document.querySelector(".gallery-grid");
 
+// Function to clone gallery cards for infinite scroll effect
+function cloneGalleryCards() {
+    const cards = Array.from(galleryGrid.children);
+    cards.forEach(card => {
+        const clone = card.cloneNode(true);
+        galleryGrid.appendChild(clone);
+    });
+}
+
+// Call clone function on page load
+cloneGalleryCards();
+
 function scrollLeft() {
-    if (galleryGrid.scrollLeft === 0) {
-        galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
-    }
     galleryGrid.scrollBy({
         left: -200,
         behavior: "smooth"
     });
+    
+    // If scrolled to the start of original set, jump to the end
+    if (galleryGrid.scrollLeft === 0) {
+        galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
+    }
 }
 
 function scrollRight() {
-    if (galleryGrid.scrollLeft + galleryGrid.clientWidth >= galleryGrid.scrollWidth) {
-        galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2 - galleryGrid.clientWidth;
-    }
     galleryGrid.scrollBy({
         left: 200,
         behavior: "smooth"
     });
+    
+    // If scrolled to the end of original set, jump to the start
+    if (galleryGrid.scrollLeft + galleryGrid.clientWidth >= galleryGrid.scrollWidth) {
+        galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2 - galleryGrid.clientWidth;
+    }
 }
 
 // Booking Modal Open/Close
