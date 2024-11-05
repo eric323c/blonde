@@ -1,22 +1,29 @@
-// Select the gallery grid and calculate card width including margin
 const galleryGrid = document.querySelector(".gallery-grid");
-const cardWidth = galleryGrid.children[0].offsetWidth + 20; // Card width + gap
 
-// Function to handle infinite scroll effect by looping back seamlessly
-function checkScrollPosition() {
-    const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
+// Set a variable to track the card width (includes the gap between cards)
+const cardWidth = galleryGrid.children[0].offsetWidth + 20;
+
+// Function to cycle cards infinitely by reordering them
+function checkInfiniteScroll() {
+    // If scrolling to the right
+    if (galleryGrid.scrollLeft >= galleryGrid.scrollWidth - galleryGrid.clientWidth) {
+        galleryGrid.scrollLeft -= cardWidth; // Adjust scroll position slightly
+
+        // Move the first card to the end of the gallery
+        galleryGrid.appendChild(galleryGrid.children[0]);
+    }
     
-    if (galleryGrid.scrollLeft >= maxScrollLeft) {
-        // When reaching the end, reset to just after the start
-        galleryGrid.scrollLeft = 1;
-    } else if (galleryGrid.scrollLeft <= 0) {
-        // When reaching the beginning, reset to just before the end
-        galleryGrid.scrollLeft = maxScrollLeft - 1;
+    // If scrolling to the left
+    else if (galleryGrid.scrollLeft <= 0) {
+        galleryGrid.scrollLeft += cardWidth; // Adjust scroll position slightly
+
+        // Move the last card to the beginning of the gallery
+        galleryGrid.insertBefore(galleryGrid.children[galleryGrid.children.length - 1], galleryGrid.children[0]);
     }
 }
 
-// Attach event listener to detect scroll position changes
-galleryGrid.addEventListener("scroll", checkScrollPosition);
+// Attach the event listener to detect scroll position changes
+galleryGrid.addEventListener("scroll", checkInfiniteScroll);
 
 // Right arrow scrolls one card width to the right
 document.querySelector(".right-arrow").addEventListener("click", () => {
