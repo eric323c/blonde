@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Booking Modal - Opens booking page in a new tab and shows modal
     document.getElementById("openModalButton").addEventListener("click", function() {
-        const bookingUrl = "https://beyondtheblondee.glossgenius.com";
+        const bookingUrl = "https://beyondtheblondee.glossgenius.com/services";
 
         // Open booking link in a new tab
         window.open(bookingUrl, '_blank');
