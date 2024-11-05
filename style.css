@@ -37,9 +37,8 @@ body {
     margin-top: 80px;
     height: 70vh;
     background: url('salon.jpg') no-repeat center center/cover;
-    background-position: center top; /* Cropped higher to show more of her body */
+    background-position-y: 20%; /* Move the image up by adjusting the Y-position */
     box-shadow: inset 0px 8px 15px rgba(0, 0, 0, 0.2), inset 0px -8px 15px rgba(0, 0, 0, 0.2);
-    border-radius: 10px;
     position: relative;
     z-index: 1;
     overflow: hidden;
@@ -54,9 +53,7 @@ body {
     height: 100%;
     box-shadow: inset 0px 8px 20px rgba(0, 0, 0, 0.3), inset 0px -8px 20px rgba(0, 0, 0, 0.3);
     z-index: -1;
-    border-radius: inherit;
 }
-
 
 /* Mid Links Section */
 .mid-links {
