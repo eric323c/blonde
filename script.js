@@ -1,105 +1,134 @@
-const galleryGrid = document.querySelector(".gallery-grid");
+document.addEventListener('DOMContentLoaded', () => {
+    // Select the gallery grid and get the width of each card
+    const galleryGrid = document.querySelector('.gallery-grid');
+    const galleryCards = Array.from(galleryGrid.children);
+    const cardWidth = galleryCards[0].offsetWidth + 20; // Card width + margin
+    const totalCards = galleryCards.length;
+    let currentIndex = 0;
+    let isDragging = false;
+    let startX = 0;
+    let scrollLeft = 0;
 
-// Set a variable to track the card width (includes the gap between cards)
-const cardWidth = galleryGrid.children[0].offsetWidth + 20;
-
-// Function to cycle cards infinitely by reordering them
-function checkInfiniteScroll() {
-    // If scrolling to the right
-    if (galleryGrid.scrollLeft >= galleryGrid.scrollWidth - galleryGrid.clientWidth) {
-        galleryGrid.scrollLeft -= cardWidth; // Adjust scroll position slightly
-
-        // Move the first card to the end of the gallery
-        galleryGrid.appendChild(galleryGrid.children[0]);
+    // Function to scroll to a specific card
+    function scrollToCard(index) {
+        const offset = index * cardWidth;
+        galleryGrid.scrollTo({
+            left: offset,
+            behavior: 'smooth'
+        });
     }
-    
-    // If scrolling to the left
-    else if (galleryGrid.scrollLeft <= 0) {
-        galleryGrid.scrollLeft += cardWidth; // Adjust scroll position slightly
 
-        // Move the last card to the beginning of the gallery
-        galleryGrid.insertBefore(galleryGrid.children[galleryGrid.children.length - 1], galleryGrid.children[0]);
+    // Function to handle left arrow click
+    function scrollLeftArrow() {
+        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
+        scrollToCard(currentIndex);
     }
-}
 
-// Attach the event listener to detect scroll position changes
-galleryGrid.addEventListener("scroll", checkInfiniteScroll);
-
-// Right arrow scrolls one card width to the right
-document.querySelector(".right-arrow").addEventListener("click", () => {
-    galleryGrid.scrollBy({
-        left: cardWidth,
-        behavior: "smooth"
-    });
-});
-
-// Left arrow scrolls one card width to the left
-document.querySelector(".left-arrow").addEventListener("click", () => {
-    galleryGrid.scrollBy({
-        left: -cardWidth,
-        behavior: "smooth"
-    });
-});
-
-// Swipe support for mobile to scroll cards
-let startX;
-galleryGrid.addEventListener("touchstart", (e) => {
-    startX = e.touches[0].clientX;
-});
-
-galleryGrid.addEventListener("touchmove", (e) => {
-    const moveX = e.touches[0].clientX;
-    const distance = moveX - startX;
-    galleryGrid.scrollLeft -= distance;
-    startX = moveX;
-});
-
-// Bounce Effect on Hover for gallery cards
-const galleryCards = document.querySelectorAll('.gallery-card');
-galleryCards.forEach(card => {
-    card.addEventListener('mouseenter', () => {
-        card.style.transform = 'scale(1.05)';
-        card.style.transition = 'transform 0.3s ease';
-    });
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = 'scale(1)';
-    });
-});
-
-// Booking Modal Open/Close
-document.getElementById("openModalButton").addEventListener("click", function() {
-    document.getElementById("bookingModal").style.display = "flex";
-});
-
-document.getElementById("closeModalButton").addEventListener("click", function() {
-    document.getElementById("bookingModal").style.display = "none";
-});
-
-// Close modal when clicking outside the content
-window.addEventListener("click", function(event) {
-    const modal = document.getElementById("bookingModal");
-    if (event.target === modal) {
-        modal.style.display = "none";
+    // Function to handle right arrow click
+    function scrollRightArrow() {
+        currentIndex = (currentIndex + 1) % totalCards;
+        scrollToCard(currentIndex);
     }
-});
 
-// Header Title Animation on Click
-document.getElementById("header-title").addEventListener("click", function() {
-    const letters = this.querySelectorAll("span");
-    letters.forEach((letter, index) => {
-        setTimeout(() => {
-            letter.classList.add("flash");
-            setTimeout(() => letter.classList.remove("flash"), 500);
-        }, index * 100); // Staggered delay of 100ms per letter
+    // Event listeners for arrow buttons
+    document.querySelector('.left-arrow').addEventListener('click', scrollLeftArrow);
+    document.querySelector('.right-arrow').addEventListener('click', scrollRightArrow);
+
+    // Touch and mouse events for swiping
+    galleryGrid.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        startX = e.pageX - galleryGrid.offsetLeft;
+        scrollLeft = galleryGrid.scrollLeft;
     });
-});
 
-// Smooth Scroll for Mid Links
-document.querySelectorAll('.mid-links .link').forEach(link => {
-    link.addEventListener('click', function(e) {
+    galleryGrid.addEventListener('mouseleave', () => {
+        isDragging = false;
+    });
+
+    galleryGrid.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+
+    galleryGrid.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
         e.preventDefault();
-        const targetId = this.getAttribute('href').substring(1);
-        const targetSection = document.getElementById(targetId);
-        targetSection.scrollIntoView({ behavior: 'smooth' });
+        const x = e.pageX - galleryGrid.offsetLeft;
+        const walk = (x - startX) * 2; // Adjust scroll speed
+        galleryGrid.scrollLeft = scrollLeft - walk;
+    });
+
+    galleryGrid.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        startX = e.touches[0].pageX - galleryGrid.offsetLeft;
+        scrollLeft = galleryGrid.scrollLeft;
+    });
+
+    galleryGrid.addEventListener('touchend', () => {
+        isDragging = false;
+    });
+
+    galleryGrid.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const x = e.touches[0].pageX - galleryGrid.offsetLeft;
+        const walk = (x - startX) * 2; // Adjust scroll speed
+        galleryGrid.scrollLeft = scrollLeft - walk;
+    });
+
+    // Infinite scroll effect
+    galleryGrid.addEventListener('scroll', () => {
+        if (galleryGrid.scrollLeft <= 0) {
+            galleryGrid.scrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth - 1;
+        } else if (galleryGrid.scrollLeft + galleryGrid.clientWidth >= galleryGrid.scrollWidth) {
+            galleryGrid.scrollLeft = 1;
+        }
+    });
+
+    // Bounce Effect on Hover for gallery cards
+    galleryCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'scale(1.05)';
+            card.style.transition = 'transform 0.3s ease';
+        });
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'scale(1)';
+        });
+    });
+
+    // Booking Modal Open/Close
+    document.getElementById("openModalButton").addEventListener("click", function() {
+        document.getElementById("bookingModal").style.display = "flex";
+    });
+
+    document.getElementById("closeModalButton").addEventListener("click", function() {
+        document.getElementById("bookingModal").style.display = "none";
+    });
+
+    // Close modal when clicking outside the content
+    window.addEventListener("click", function(event) {
+        const modal = document.getElementById("bookingModal");
+        if (event.target === modal) {
+            modal.style.display = "none";
+        }
+    });
+
+    // Header Title Animation on Click
+    document.getElementById("header-title").addEventListener("click", function() {
+        const letters = this.querySelectorAll("span");
+        letters.forEach((letter, index) => {
+            setTimeout(() => {
+                letter.classList.add("flash");
+                setTimeout(() => letter.classList.remove("flash"), 500);
+            }, index * 100); // Staggered delay of 100ms per letter
+        });
+    });
+
+    // Smooth Scroll for Mid Links
+    document.querySelectorAll('.mid-links .link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            targetSection.scrollIntoView({ behavior: 'smooth' });
+        });
     });
 });
