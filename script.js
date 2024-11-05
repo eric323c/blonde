@@ -33,7 +33,7 @@ sliders.forEach(slider => {
 // Gallery Infinite Scrolling
 const galleryGrid = document.querySelector(".gallery-grid");
 
-// Function to clone gallery cards for infinite scroll effect
+// Clone gallery cards for infinite scroll effect
 function cloneGalleryCards() {
     const cards = Array.from(galleryGrid.children);
     cards.forEach(card => {
@@ -50,11 +50,6 @@ function scrollLeft() {
         left: -200,
         behavior: "smooth"
     });
-    
-    // If scrolled to the start of original set, jump to the end
-    if (galleryGrid.scrollLeft === 0) {
-        galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
-    }
 }
 
 function scrollRight() {
@@ -62,12 +57,44 @@ function scrollRight() {
         left: 200,
         behavior: "smooth"
     });
-    
-    // If scrolled to the end of original set, jump to the start
-    if (galleryGrid.scrollLeft + galleryGrid.clientWidth >= galleryGrid.scrollWidth) {
+}
+
+// Adjust scroll position for infinite looping effect
+galleryGrid.addEventListener('scroll', () => {
+    if (galleryGrid.scrollLeft === 0) {
+        galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
+    } else if (galleryGrid.scrollLeft + galleryGrid.clientWidth >= galleryGrid.scrollWidth) {
         galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2 - galleryGrid.clientWidth;
     }
-}
+});
+
+// Touch Swipe for Mobile
+let startX;
+galleryGrid.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+});
+
+galleryGrid.addEventListener('touchmove', (e) => {
+    const moveX = e.touches[0].clientX;
+    const distance = moveX - startX;
+
+    galleryGrid.scrollBy({
+        left: -distance,
+        behavior: "auto"
+    });
+    startX = moveX;
+});
+
+// Bounce Effect on Hover
+const galleryCards = document.querySelectorAll('.gallery-card');
+galleryCards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+        card.style.transform = 'scale(1.05)';
+    });
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = 'scale(1)';
+    });
+});
 
 // Booking Modal Open/Close
 document.getElementById("openModalButton").addEventListener("click", function() {
