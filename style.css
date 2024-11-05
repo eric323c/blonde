@@ -53,6 +53,7 @@ body {
     color: #2b2b2b;
     text-decoration: none;
     margin: 0 15px;
+    cursor: pointer;
 }
 
 .section {
@@ -78,16 +79,17 @@ body {
 
 .gallery-grid {
     display: flex;
-    overflow-x: scroll;
+    overflow-x: hidden;
     gap: 20px;
-    padding: 20px 50px; /* Added left and right padding */
+    padding: 20px 5%; /* Full-width padding */
+    width: 100vw; /* Ensure full-width spanning */
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
 }
 
 .gallery-card {
-    width: 180px;
-    height: 260px;
+    width: 240px; /* Larger for visibility */
+    height: 320px; /* Taller for better aspect */
     perspective: 1000px;
     position: relative;
     flex-shrink: 0;
@@ -131,7 +133,7 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 24px;
+    font-size: 18px;
     color: #333;
     background: none;
     border: none;
