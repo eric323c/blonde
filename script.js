@@ -1,66 +1,53 @@
-// Select the gallery grid and arrows
+// Select the gallery grid and calculate card width including margin
 const galleryGrid = document.querySelector(".gallery-grid");
-const leftArrow = document.querySelector(".left-arrow");
-const rightArrow = document.querySelector(".right-arrow");
+const cardWidth = galleryGrid.children[0].offsetWidth + 20; // Card width + gap
 
-// Duplicate the gallery items for smooth looping
-const cards = Array.from(galleryGrid.children);
-cards.forEach(card => {
-    const clone = card.cloneNode(true);
-    galleryGrid.appendChild(clone);
-});
-cards.forEach(card => {
-    const clone = card.cloneNode(true);
-    galleryGrid.insertBefore(clone, galleryGrid.firstChild);
-});
-
-// Adjust initial scroll position to the middle of duplicated cards
-const cardWidth = cards[0].offsetWidth + 20; // Assuming 20px gap
-galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
-
-// Function to handle the infinite scroll effect
-function handleScroll() {
-    if (galleryGrid.scrollLeft <= 0) {
-        // If scrolled to the very left, reset to the middle
-        galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2 - cardWidth;
-    } else if (galleryGrid.scrollLeft + galleryGrid.clientWidth >= galleryGrid.scrollWidth) {
-        // If scrolled to the very right, reset to the middle
-        galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2 + cardWidth;
+// Function to handle infinite scroll effect by looping back seamlessly
+function checkScrollPosition() {
+    const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
+    
+    if (galleryGrid.scrollLeft >= maxScrollLeft) {
+        // When reaching the end, reset to just after the start
+        galleryGrid.scrollLeft = 1;
+    } else if (galleryGrid.scrollLeft <= 0) {
+        // When reaching the beginning, reset to just before the end
+        galleryGrid.scrollLeft = maxScrollLeft - 1;
     }
 }
 
-// Attach event listeners to the arrow buttons
-rightArrow.addEventListener('click', () => {
+// Attach event listener to detect scroll position changes
+galleryGrid.addEventListener("scroll", checkScrollPosition);
+
+// Right arrow scrolls one card width to the right
+document.querySelector(".right-arrow").addEventListener("click", () => {
     galleryGrid.scrollBy({
         left: cardWidth,
         behavior: "smooth"
     });
 });
 
-leftArrow.addEventListener('click', () => {
+// Left arrow scrolls one card width to the left
+document.querySelector(".left-arrow").addEventListener("click", () => {
     galleryGrid.scrollBy({
         left: -cardWidth,
         behavior: "smooth"
     });
 });
 
-// Apply the same behavior for swipe on mobile
+// Swipe support for mobile to scroll cards
 let startX;
-galleryGrid.addEventListener('touchstart', (e) => {
+galleryGrid.addEventListener("touchstart", (e) => {
     startX = e.touches[0].clientX;
 });
 
-galleryGrid.addEventListener('touchmove', (e) => {
+galleryGrid.addEventListener("touchmove", (e) => {
     const moveX = e.touches[0].clientX;
     const distance = moveX - startX;
     galleryGrid.scrollLeft -= distance;
     startX = moveX;
 });
 
-// Event listener to reset scroll position for infinite effect
-galleryGrid.addEventListener('scroll', handleScroll);
-
-// Bounce Effect on Hover
+// Bounce Effect on Hover for gallery cards
 const galleryCards = document.querySelectorAll('.gallery-card');
 galleryCards.forEach(card => {
     card.addEventListener('mouseenter', () => {
