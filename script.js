@@ -1,5 +1,5 @@
 // Slider Functionality for Before and After Images
-const sliders = document.querySelectorAll('.gallery-item .after-overlay');
+const sliders = document.querySelectorAll('.gallery-card .gallery-card-inner');
 
 sliders.forEach(slider => {
     const handle = slider.querySelector('.slider-handle');
@@ -72,11 +72,21 @@ window.addEventListener("click", function(event) {
 
 // Header Title Animation on Click
 document.getElementById("header-title").addEventListener("click", function() {
-  const letters = this.querySelectorAll("span");
-  letters.forEach((letter, index) => {
-    setTimeout(() => {
-      letter.classList.add("flash");
-      setTimeout(() => letter.classList.remove("flash"), 500);
-    }, index * 100); // Staggered delay of 100ms per letter
-  });
+    const letters = this.querySelectorAll("span");
+    letters.forEach((letter, index) => {
+        setTimeout(() => {
+            letter.classList.add("flash");
+            setTimeout(() => letter.classList.remove("flash"), 500);
+        }, index * 100); // Staggered delay of 100ms per letter
+    });
+});
+
+// Smooth Scroll for Mid Links
+document.querySelectorAll('.mid-links .link').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        const targetSection = document.getElementById(targetId);
+        targetSection.scrollIntoView({ behavior: 'smooth' });
+    });
 });
