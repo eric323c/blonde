@@ -264,6 +264,7 @@ body {
 .flash {
   animation: flashColor 0.5s ease;
 }
+
 /* About Section */
 .about-section {
     display: flex;
@@ -303,6 +304,11 @@ body {
 .about-image {
     width: 100%;
     height: auto;
+    border-radius: 5px;
+    object-fit: cover;
+    max-width: 300px;
+}
+
     border-radius: 5px;
     object-fit: cover;
     max-width: 300px;
