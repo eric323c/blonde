@@ -1,3 +1,4 @@
+// Slider Functionality for Before and After Images
 const sliders = document.querySelectorAll('.gallery-item .after-overlay');
 
 sliders.forEach(slider => {
@@ -18,16 +19,18 @@ sliders.forEach(slider => {
         if (!isDragging) return;
         const rect = slider.parentElement.getBoundingClientRect();
         let offset = e.clientX - rect.left;
-        
+
         // Limit the dragging to within the bounds of the image
         if (offset < 0) offset = 0;
         if (offset > rect.width) offset = rect.width;
-        
+
         // Set the slider overlay width and handle position
         slider.style.width = `${offset}px`;
         handle.style.left = `${offset - 15}px`;
     });
 });
+
+// Gallery Infinite Scrolling
 const galleryGrid = document.querySelector(".gallery-grid");
 
 function scrollLeft() {
@@ -49,6 +52,8 @@ function scrollRight() {
         behavior: "smooth"
     });
 }
+
+// Booking Modal Open/Close
 document.getElementById("openModalButton").addEventListener("click", function() {
     document.getElementById("bookingModal").style.display = "flex";
 });
@@ -64,6 +69,8 @@ window.addEventListener("click", function(event) {
         modal.style.display = "none";
     }
 });
+
+// Header Title Animation on Click
 document.getElementById("header-title").addEventListener("click", function() {
   const letters = this.querySelectorAll("span");
   letters.forEach((letter, index) => {
