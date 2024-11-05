@@ -100,11 +100,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Booking Modal Open/Close
-    document.getElementById("openModalButton").addEventListener("click", function() {
-        document.getElementById("bookingModal").style.display = "flex";
+    // Updated Booking Section - Open a new tab and display modal
+    document.getElementById("openBookingButton").addEventListener("click", function() {
+        const bookingUrl = "https://beyondtheblondee.glossgenius.com";
+
+        // Open booking link in a new tab
+        window.open(bookingUrl, '_blank');
+
+        // Display modal with "Redirecting" message
+        const modal = document.getElementById("bookingModal");
+        modal.style.display = "flex";
+
+        // Automatically close modal after 3 seconds
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 3000);
     });
 
+    // Close booking modal manually
     document.getElementById("closeModalButton").addEventListener("click", function() {
         document.getElementById("bookingModal").style.display = "none";
     });
