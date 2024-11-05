@@ -6,27 +6,26 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let scrollLeft = 0;
 
-    // Clone cards at the start and end to create a seamless circular effect
-    galleryCards.forEach(card => {
-        const cloneStart = card.cloneNode(true);
-        const cloneEnd = card.cloneNode(true);
-        galleryGrid.appendChild(cloneEnd); // Append clones to the end
-        galleryGrid.insertBefore(cloneStart, galleryCards[0]); // Prepend clones to the start
-    });
+    // Set up continuous scroll by repositioning cards
+    function setupContinuousLoop() {
+        galleryCards.forEach((card, index) => {
+            card.style.left = `${index * cardWidth}px`;
+        });
+    }
 
-    // Adjust initial scroll position to the middle of the gallery
-    galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
+    function handleContinuousScroll() {
+        const scrollPos = galleryGrid.scrollLeft;
+        const maxScroll = galleryGrid.scrollWidth - galleryGrid.clientWidth;
 
-    // Function to handle infinite scrolling without "jumping"
-    function handleInfiniteScroll() {
-        const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
-
-        if (galleryGrid.scrollLeft <= 0) {
-            galleryGrid.scrollLeft = maxScrollLeft / 2;
-        } else if (galleryGrid.scrollLeft >= maxScrollLeft) {
-            galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
+        if (scrollPos >= maxScroll) {
+            galleryGrid.scrollLeft = 0; // Reset to start for seamless loop
+        } else if (scrollPos <= 0) {
+            galleryGrid.scrollLeft = maxScroll - cardWidth; // Seamlessly move to end
         }
     }
+
+    // Initialize continuous loop setup
+    setupContinuousLoop();
 
     // Arrow navigation
     document.querySelector('.right-arrow').addEventListener('click', () => {
@@ -43,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Dragging for smooth swipe on desktop and touch devices
+    // Dragging for smooth swipe on desktop
     galleryGrid.addEventListener('mousedown', (e) => {
         isDragging = true;
         startX = e.pageX - galleryGrid.offsetLeft;
@@ -84,8 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryGrid.scrollLeft = scrollLeft - walk;
     });
 
-    // Event listener to continuously check and adjust for infinite scroll
-    galleryGrid.addEventListener('scroll', handleInfiniteScroll);
+    // Event listener for infinite loop
+    galleryGrid.addEventListener('scroll', handleContinuousScroll);
 
     // Bounce Effect on Hover for gallery cards
     const allCards = galleryGrid.querySelectorAll('.gallery-card');
@@ -101,16 +100,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Booking Modal - Opens booking page in a new tab and shows modal
     document.getElementById("openModalButton").addEventListener("click", function() {
-        const bookingUrl = "https://beyondtheblondee.glossgenius.com/services";
-
-        // Open booking link in a new tab
+        const bookingUrl = "https://beyondtheblondee.glossgenius.com";
         window.open(bookingUrl, '_blank');
 
-        // Display modal with "Redirecting" message
         const modal = document.getElementById("bookingModal");
         modal.style.display = "flex";
-
-        // Automatically close modal after 3 seconds
         setTimeout(() => {
             modal.style.display = "none";
         }, 3000);
@@ -136,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 letter.classList.add("flash");
                 setTimeout(() => letter.classList.remove("flash"), 500);
-            }, index * 100); // Staggered delay of 100ms per letter
+            }, index * 100);
         });
     });
 
