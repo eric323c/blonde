@@ -1,40 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Select the gallery grid and get the width of each card
     const galleryGrid = document.querySelector('.gallery-grid');
     const galleryCards = Array.from(galleryGrid.children);
     const cardWidth = galleryCards[0].offsetWidth + 20; // Card width + margin
     const totalCards = galleryCards.length;
-    let currentIndex = 0;
     let isDragging = false;
     let startX = 0;
     let scrollLeft = 0;
 
-    // Function to scroll to a specific card
-    function scrollToCard(index) {
-        const offset = index * cardWidth;
-        galleryGrid.scrollTo({
-            left: offset,
-            behavior: 'smooth'
+    // Clone cards at the start and end to create a seamless circular effect
+    galleryCards.forEach(card => {
+        const cloneStart = card.cloneNode(true);
+        const cloneEnd = card.cloneNode(true);
+        galleryGrid.appendChild(cloneEnd); // Append clones to the end
+        galleryGrid.insertBefore(cloneStart, galleryCards[0]); // Prepend clones to the start
+    });
+
+    // Adjust initial scroll position to the middle of the gallery
+    galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
+
+    // Function to handle infinite scrolling without "jumping"
+    function handleInfiniteScroll() {
+        const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
+
+        if (galleryGrid.scrollLeft <= 0) {
+            galleryGrid.scrollLeft = maxScrollLeft / 2;
+        } else if (galleryGrid.scrollLeft >= maxScrollLeft) {
+            galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
+        }
+    }
+
+    // Arrow navigation
+    document.querySelector('.right-arrow').addEventListener('click', () => {
+        galleryGrid.scrollBy({
+            left: cardWidth,
+            behavior: "smooth"
         });
-    }
+    });
 
-    // Function to handle left arrow click
-    function scrollLeftArrow() {
-        currentIndex = (currentIndex - 1 + totalCards) % totalCards;
-        scrollToCard(currentIndex);
-    }
+    document.querySelector('.left-arrow').addEventListener('click', () => {
+        galleryGrid.scrollBy({
+            left: -cardWidth,
+            behavior: "smooth"
+        });
+    });
 
-    // Function to handle right arrow click
-    function scrollRightArrow() {
-        currentIndex = (currentIndex + 1) % totalCards;
-        scrollToCard(currentIndex);
-    }
-
-    // Event listeners for arrow buttons
-    document.querySelector('.left-arrow').addEventListener('click', scrollLeftArrow);
-    document.querySelector('.right-arrow').addEventListener('click', scrollRightArrow);
-
-    // Touch and mouse events for swiping
+    // Dragging for smooth swipe on desktop and touch devices
     galleryGrid.addEventListener('mousedown', (e) => {
         isDragging = true;
         startX = e.pageX - galleryGrid.offsetLeft;
@@ -53,10 +63,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isDragging) return;
         e.preventDefault();
         const x = e.pageX - galleryGrid.offsetLeft;
-        const walk = (x - startX) * 2; // Adjust scroll speed
+        const walk = (x - startX) * 2; // Speed up scroll
         galleryGrid.scrollLeft = scrollLeft - walk;
     });
 
+    // Touch events for mobile
     galleryGrid.addEventListener('touchstart', (e) => {
         isDragging = true;
         startX = e.touches[0].pageX - galleryGrid.offsetLeft;
@@ -70,21 +81,16 @@ document.addEventListener('DOMContentLoaded', () => {
     galleryGrid.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
         const x = e.touches[0].pageX - galleryGrid.offsetLeft;
-        const walk = (x - startX) * 2; // Adjust scroll speed
+        const walk = (x - startX) * 2; // Speed up scroll
         galleryGrid.scrollLeft = scrollLeft - walk;
     });
 
-    // Infinite scroll effect
-    galleryGrid.addEventListener('scroll', () => {
-        if (galleryGrid.scrollLeft <= 0) {
-            galleryGrid.scrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth - 1;
-        } else if (galleryGrid.scrollLeft + galleryGrid.clientWidth >= galleryGrid.scrollWidth) {
-            galleryGrid.scrollLeft = 1;
-        }
-    });
+    // Event listener to continuously check and adjust for infinite scroll
+    galleryGrid.addEventListener('scroll', handleInfiniteScroll);
 
     // Bounce Effect on Hover for gallery cards
-    galleryCards.forEach(card => {
+    const allCards = galleryGrid.querySelectorAll('.gallery-card');
+    allCards.forEach(card => {
         card.addEventListener('mouseenter', () => {
             card.style.transform = 'scale(1.05)';
             card.style.transition = 'transform 0.3s ease';
