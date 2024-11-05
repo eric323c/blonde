@@ -1,37 +1,7 @@
-// Slider Functionality for Before and After Images
-const sliders = document.querySelectorAll('.gallery-card .gallery-card-inner');
-
-sliders.forEach(slider => {
-    const handle = slider.querySelector('.slider-handle');
-    let isDragging = false;
-
-    handle.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        document.body.style.cursor = 'ew-resize';
-    });
-
-    document.addEventListener('mouseup', () => {
-        isDragging = false;
-        document.body.style.cursor = 'default';
-    });
-
-    document.addEventListener('mousemove', (e) => {
-        if (!isDragging) return;
-        const rect = slider.parentElement.getBoundingClientRect();
-        let offset = e.clientX - rect.left;
-
-        // Limit the dragging to within the bounds of the image
-        if (offset < 0) offset = 0;
-        if (offset > rect.width) offset = rect.width;
-
-        // Set the slider overlay width and handle position
-        slider.style.width = `${offset}px`;
-        handle.style.left = `${offset - 15}px`;
-    });
-});
-
-// Gallery Infinite Scrolling
+// Gallery Infinite Scrolling with Button Controls
 const galleryGrid = document.querySelector(".gallery-grid");
+const leftArrow = document.querySelector(".left-arrow");
+const rightArrow = document.querySelector(".right-arrow");
 
 // Clone gallery cards for infinite scroll effect
 function cloneGalleryCards() {
@@ -42,24 +12,26 @@ function cloneGalleryCards() {
     });
 }
 
-// Call clone function on page load
+// Call clone function to set up infinite scroll
 cloneGalleryCards();
 
-function scrollLeft() {
-    galleryGrid.scrollBy({
-        left: -200,
-        behavior: "smooth"
-    });
-}
-
-function scrollRight() {
+// Scroll to the right by 200px when right arrow is clicked
+rightArrow.addEventListener('click', () => {
     galleryGrid.scrollBy({
         left: 200,
         behavior: "smooth"
     });
-}
+});
 
-// Adjust scroll position for infinite looping effect
+// Scroll to the left by 200px when left arrow is clicked
+leftArrow.addEventListener('click', () => {
+    galleryGrid.scrollBy({
+        left: -200,
+        behavior: "smooth"
+    });
+});
+
+// Infinite scroll effect
 galleryGrid.addEventListener('scroll', () => {
     if (galleryGrid.scrollLeft === 0) {
         galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
@@ -68,7 +40,7 @@ galleryGrid.addEventListener('scroll', () => {
     }
 });
 
-// Touch Swipe for Mobile
+// Enable swipe for mobile devices
 let startX;
 galleryGrid.addEventListener('touchstart', (e) => {
     startX = e.touches[0].clientX;
@@ -77,7 +49,6 @@ galleryGrid.addEventListener('touchstart', (e) => {
 galleryGrid.addEventListener('touchmove', (e) => {
     const moveX = e.touches[0].clientX;
     const distance = moveX - startX;
-
     galleryGrid.scrollBy({
         left: -distance,
         behavior: "auto"
@@ -90,6 +61,7 @@ const galleryCards = document.querySelectorAll('.gallery-card');
 galleryCards.forEach(card => {
     card.addEventListener('mouseenter', () => {
         card.style.transform = 'scale(1.05)';
+        card.style.transition = 'transform 0.3s ease';
     });
     card.addEventListener('mouseleave', () => {
         card.style.transform = 'scale(1)';
