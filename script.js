@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const galleryGrid = document.querySelector('.gallery-grid');
     const galleryCards = Array.from(galleryGrid.children);
     const cardWidth = galleryCards[0].offsetWidth + 20; // Card width + margin
-    const totalCards = galleryCards.length;
     let isDragging = false;
     let startX = 0;
     let scrollLeft = 0;
@@ -63,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isDragging) return;
         e.preventDefault();
         const x = e.pageX - galleryGrid.offsetLeft;
-        const walk = (x - startX) * 2; // Speed up scroll
+        const walk = (x - startX) * 1.5; // Adjust scroll speed
         galleryGrid.scrollLeft = scrollLeft - walk;
     });
 
@@ -81,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     galleryGrid.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
         const x = e.touches[0].pageX - galleryGrid.offsetLeft;
-        const walk = (x - startX) * 2; // Speed up scroll
+        const walk = (x - startX) * 1.5; // Adjust scroll speed
         galleryGrid.scrollLeft = scrollLeft - walk;
     });
 
@@ -100,8 +99,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Updated Booking Section - Open a new tab and display modal
-    document.getElementById("openBookingButton").addEventListener("click", function() {
+    // Booking Modal - Opens booking page in a new tab and shows modal
+    document.getElementById("openModalButton").addEventListener("click", function() {
         const bookingUrl = "https://beyondtheblondee.glossgenius.com";
 
         // Open booking link in a new tab
@@ -117,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 3000);
     });
 
-    // Close booking modal manually
+    // Close modal manually
     document.getElementById("closeModalButton").addEventListener("click", function() {
         document.getElementById("bookingModal").style.display = "none";
     });
