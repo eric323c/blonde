@@ -11,6 +11,7 @@ body {
     color: #2b2b2b;
 }
 
+/* Header */
 .masthead {
     position: fixed;
     top: 0;
@@ -31,12 +32,15 @@ body {
     letter-spacing: 2px;
 }
 
+/* Hero Section */
 .hero {
     margin-top: 80px;
     height: 70vh;
     background: url('salon.jpg') no-repeat center center/cover;
+    background-position: top; /* Adjust to show Lexi's face */
 }
 
+/* Mid Links Section */
 .mid-links {
     display: flex;
     justify-content: center;
@@ -64,6 +68,7 @@ body {
     margin-bottom: 20px;
 }
 
+/* Gallery Section */
 .gallery-section {
     position: relative;
     overflow: hidden;
@@ -71,16 +76,11 @@ body {
     text-align: center;
 }
 
-.section-title {
-    font-size: 2em;
-    margin-bottom: 20px;
-}
-
 .gallery-grid {
     display: flex;
     overflow-x: scroll;
     gap: 20px;
-    padding: 20px 30px;
+    padding: 20px 50px; /* Added left and right padding */
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
 }
@@ -92,13 +92,13 @@ body {
     position: relative;
     flex-shrink: 0;
     scroll-snap-align: start;
+    transition: transform 0.5s;
 }
 
 .gallery-card-inner {
     position: relative;
     width: 100%;
     height: 100%;
-    transition: transform 0.5s;
     transform-style: preserve-3d;
 }
 
@@ -126,6 +126,7 @@ body {
     transform: rotateY(180deg);
 }
 
+/* Gallery Arrows */
 .gallery-arrow {
     position: absolute;
     top: 50%;
@@ -160,7 +161,8 @@ body {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
-/* Booking section button */
+
+/* Booking Section */
 .booking-section {
     text-align: center;
     padding: 40px;
@@ -180,7 +182,7 @@ body {
     background-color: #444;
 }
 
-/* Modal styles */
+/* Modal Styles */
 .modal {
     display: none; /* Hidden by default */
     position: fixed;
@@ -221,22 +223,24 @@ body {
     border: none;
     border-radius: 8px;
 }
+
+/* Header Title with Animation */
 #header-title {
-  background-color: black; /* Keep the shortened black navbar effect */
-  padding: 10px; /* Adjust padding as needed */
-  display: inline-block; /* To fit the text size */
-  border-radius: 5px; /* Optional, for styling */
+  background-color: black;
+  padding: 10px;
+  display: inline-block;
+  border-radius: 5px;
 }
 
 #header-title span {
   display: inline-block;
   transition: color 0.3s ease;
-  color: white; /* Default text color */
+  color: white;
 }
 
 @keyframes flashColor {
   0% { color: white; }
-  50% { color: #ff5733; } /* Flash color */
+  50% { color: #ff5733; }
   100% { color: white; }
 }
 
