@@ -1,46 +1,50 @@
-// Gallery Infinite Scrolling with Button Controls
+// Select the gallery grid and arrows
 const galleryGrid = document.querySelector(".gallery-grid");
 const leftArrow = document.querySelector(".left-arrow");
 const rightArrow = document.querySelector(".right-arrow");
 
-// Clone gallery cards for infinite scroll effect
-function cloneGalleryCards() {
-    const cards = Array.from(galleryGrid.children);
-    cards.forEach(card => {
-        const clone = card.cloneNode(true);
-        galleryGrid.appendChild(clone);
-    });
+// Duplicate the gallery items for smooth looping
+const cards = Array.from(galleryGrid.children);
+cards.forEach(card => {
+    const clone = card.cloneNode(true);
+    galleryGrid.appendChild(clone);
+});
+cards.forEach(card => {
+    const clone = card.cloneNode(true);
+    galleryGrid.insertBefore(clone, galleryGrid.firstChild);
+});
+
+// Adjust initial scroll position to the middle of duplicated cards
+const cardWidth = cards[0].offsetWidth + 20; // Assuming 20px gap
+galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
+
+// Function to handle the infinite scroll effect
+function handleScroll() {
+    if (galleryGrid.scrollLeft <= 0) {
+        // If scrolled to the very left, reset to the middle
+        galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2 - cardWidth;
+    } else if (galleryGrid.scrollLeft + galleryGrid.clientWidth >= galleryGrid.scrollWidth) {
+        // If scrolled to the very right, reset to the middle
+        galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2 + cardWidth;
+    }
 }
 
-// Call clone function to set up infinite scroll
-cloneGalleryCards();
-
-// Scroll to the right by 200px when right arrow is clicked
+// Attach event listeners to the arrow buttons
 rightArrow.addEventListener('click', () => {
     galleryGrid.scrollBy({
-        left: 200,
+        left: cardWidth,
         behavior: "smooth"
     });
 });
 
-// Scroll to the left by 200px when left arrow is clicked
 leftArrow.addEventListener('click', () => {
     galleryGrid.scrollBy({
-        left: -200,
+        left: -cardWidth,
         behavior: "smooth"
     });
 });
 
-// Infinite scroll effect
-galleryGrid.addEventListener('scroll', () => {
-    if (galleryGrid.scrollLeft === 0) {
-        galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
-    } else if (galleryGrid.scrollLeft + galleryGrid.clientWidth >= galleryGrid.scrollWidth) {
-        galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2 - galleryGrid.clientWidth;
-    }
-});
-
-// Enable swipe for mobile devices
+// Apply the same behavior for swipe on mobile
 let startX;
 galleryGrid.addEventListener('touchstart', (e) => {
     startX = e.touches[0].clientX;
@@ -49,12 +53,12 @@ galleryGrid.addEventListener('touchstart', (e) => {
 galleryGrid.addEventListener('touchmove', (e) => {
     const moveX = e.touches[0].clientX;
     const distance = moveX - startX;
-    galleryGrid.scrollBy({
-        left: -distance,
-        behavior: "auto"
-    });
+    galleryGrid.scrollLeft -= distance;
     startX = moveX;
 });
+
+// Event listener to reset scroll position for infinite effect
+galleryGrid.addEventListener('scroll', handleScroll);
 
 // Bounce Effect on Hover
 const galleryCards = document.querySelectorAll('.gallery-card');
