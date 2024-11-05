@@ -37,7 +37,7 @@ body {
     margin-top: 80px;
     height: 70vh;
     background: url('salon.jpg') no-repeat center center/cover;
-    background-position-y: 20%; /* Move the image up by adjusting the Y-position */
+    background-position-y: 20%; /* Adjust Y-position */
     box-shadow: inset 0px 8px 15px rgba(0, 0, 0, 0.2), inset 0px -8px 15px rgba(0, 0, 0, 0.2);
     position: relative;
     z-index: 1;
@@ -97,19 +97,20 @@ body {
     overflow-x: hidden;
     gap: 20px;
     padding: 20px 5%; /* Full-width padding */
-    width: 100vw; /* Ensure full-width spanning */
+    width: 100vw; /* Full width */
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
 }
 
 .gallery-card {
-    width: 240px; /* Larger for visibility */
-    height: 320px; /* Taller for better aspect */
+    width: 240px;
+    height: 320px;
     perspective: 1000px;
     position: relative;
     flex-shrink: 0;
     scroll-snap-align: start;
     transition: transform 0.5s;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 .gallery-card-inner {
@@ -148,13 +149,13 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 18px;
+    font-size: 24px;
     color: #333;
     background: none;
     border: none;
     cursor: pointer;
     z-index: 10;
-    opacity: 0.5;
+    opacity: 0.7;
     transition: opacity 0.3s;
 }
 
@@ -163,11 +164,11 @@ body {
 }
 
 .left-arrow {
-    left: 10px;
+    left: 15px;
 }
 
 .right-arrow {
-    right: 10px;
+    right: 15px;
 }
 
 /* Hide scrollbar */
@@ -211,18 +212,18 @@ body {
     z-index: 1000;
     justify-content: center;
     align-items: center;
+    color: #fff;
 }
 
 .modal-content {
     position: relative;
-    background-color: #fff;
+    background-color: #222;
     padding: 20px;
     max-width: 90%;
     max-height: 90%;
-    width: 800px;
+    width: 300px;
     border-radius: 8px;
-    display: flex;
-    flex-direction: column;
+    text-align: center;
 }
 
 .close-button {
@@ -230,39 +231,32 @@ body {
     top: 10px;
     right: 15px;
     font-size: 24px;
-    color: #333;
+    color: #fff;
     cursor: pointer;
-}
-
-.booking-iframe {
-    width: 100%;
-    height: 80vh;
-    border: none;
-    border-radius: 8px;
 }
 
 /* Header Title with Animation */
 #header-title {
-  background-color: black;
-  padding: 10px;
-  display: inline-block;
-  border-radius: 5px;
+    background-color: black;
+    padding: 10px;
+    display: inline-block;
+    border-radius: 5px;
 }
 
 #header-title span {
-  display: inline-block;
-  transition: color 0.3s ease;
-  color: white;
+    display: inline-block;
+    transition: color 0.3s ease;
+    color: white;
 }
 
 @keyframes flashColor {
-  0% { color: white; }
-  50% { color: #ff5733; }
-  100% { color: white; }
+    0% { color: white; }
+    50% { color: #ff5733; }
+    100% { color: white; }
 }
 
 .flash {
-  animation: flashColor 0.5s ease;
+    animation: flashColor 0.5s ease;
 }
 
 /* About Section */
@@ -304,11 +298,6 @@ body {
 .about-image {
     width: 100%;
     height: auto;
-    border-radius: 5px;
-    object-fit: cover;
-    max-width: 300px;
-}
-
     border-radius: 5px;
     object-fit: cover;
     max-width: 300px;
