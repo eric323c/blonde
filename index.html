@@ -20,7 +20,7 @@
 
     <!-- Hero Section -->
     <section class="hero">
-        <!-- Placeholder for hero image -->
+        <!-- Background image set in CSS -->
     </section>
 
     <!-- Mid Links Section -->
@@ -39,12 +39,14 @@
             <div class="about-text">
                 <p>Welcome to Beyond the Blonde, where Lexi brings your dream style to life.</p>
             </div>
-            <div class="about-image">Placeholder for Lexi's Image</div>
+            <div class="about-image">
+                <img src="lexie.jpg" alt="Lexi's Image">
+            </div>
         </div>
     </section>
 
     <!-- Gallery Section -->
-    <div class="gallery-section">
+    <div id="gallery" class="gallery-section">
         <h2 class="section-title">GALLERY</h2>
         <button class="gallery-arrow left-arrow" onclick="scrollLeft()">&lsaquo;</button>
         <div class="gallery-grid">
@@ -58,7 +60,6 @@
                     </div>
                 </div>
             </div>
-            <!-- Add more cards here -->
             <div class="gallery-card">
                 <div class="gallery-card-inner">
                     <div class="gallery-card-front">
@@ -69,6 +70,17 @@
                     </div>
                 </div>
             </div>
+            <div class="gallery-card">
+                <div class="gallery-card-inner">
+                    <div class="gallery-card-front">
+                        <img src="3.jpeg" alt="Before Image 3">
+                    </div>
+                    <div class="gallery-card-back">
+                        <img src="3.5.jpeg" alt="After Image 3">
+                    </div>
+                </div>
+            </div>
+            <!-- Add more gallery cards as needed -->
         </div>
         <button class="gallery-arrow right-arrow" onclick="scrollRight()">&rsaquo;</button>
     </div>
@@ -91,4 +103,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
