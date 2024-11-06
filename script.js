@@ -6,34 +6,46 @@ document.addEventListener('DOMContentLoaded', () => {
     let scrollLeft = 0;
     let isDragging = false;
 
-    // Function to move the scroll position
-    function smoothScroll(offset) {
-        galleryGrid.scrollBy({
-            left: offset,
-            behavior: 'smooth'
-        });
-    }
+    // Duplicate cards for infinite effect
+    galleryCards.forEach(card => {
+        const cloneStart = card.cloneNode(true);
+        const cloneEnd = card.cloneNode(true);
+        galleryGrid.appendChild(cloneEnd); // Append clone to the end
+        galleryGrid.insertBefore(cloneStart, galleryGrid.firstChild); // Prepend clone to the start
+    });
 
-    // Function to update gallery positioning to create a seamless loop
+    // Set initial scroll position to the middle
+    galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
+
+    // Update scroll to create seamless loop
     function updateLoopScroll() {
-        const scrollPosition = galleryGrid.scrollLeft;
         const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
-
-        if (scrollPosition <= 0) {
-            galleryGrid.scrollLeft = maxScrollLeft - cardWidth;
-        } else if (scrollPosition >= maxScrollLeft) {
-            galleryGrid.scrollLeft = cardWidth;
+        if (galleryGrid.scrollLeft <= 0) {
+            galleryGrid.scrollLeft = maxScrollLeft / 2 - cardWidth;
+        } else if (galleryGrid.scrollLeft >= maxScrollLeft) {
+            galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
         }
     }
 
-    // Set up automatic scrolling when reaching either end
+    // Event listener to continuously check and adjust for infinite scroll
     galleryGrid.addEventListener('scroll', updateLoopScroll);
 
     // Arrow navigation
-    document.querySelector('.right-arrow').addEventListener('click', () => smoothScroll(cardWidth));
-    document.querySelector('.left-arrow').addEventListener('click', () => smoothScroll(-cardWidth));
+    document.querySelector('.right-arrow').addEventListener('click', () => {
+        galleryGrid.scrollBy({
+            left: cardWidth,
+            behavior: 'smooth'
+        });
+    });
 
-    // Dragging for smooth swipe on desktop
+    document.querySelector('.left-arrow').addEventListener('click', () => {
+        galleryGrid.scrollBy({
+            left: -cardWidth,
+            behavior: 'smooth'
+        });
+    });
+
+    // Dragging functionality for desktop
     galleryGrid.addEventListener('mousedown', (e) => {
         isDragging = true;
         startX = e.pageX - galleryGrid.offsetLeft;
