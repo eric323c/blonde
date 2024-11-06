@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Toggle card flip on click
-    allCards.forEach(card => {
+    galleryCards.forEach(card => {
         card.addEventListener('click', () => {
             const inner = card.querySelector('.gallery-card-inner');
             if (inner.style.transform === 'rotateY(180deg)') {
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Adding "Before" and "After" labels to front and back images
-    allCards.forEach(card => {
+    galleryCards.forEach(card => {
         const frontLabel = document.createElement('div');
         frontLabel.className = 'label';
         frontLabel.textContent = 'After';
