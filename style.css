@@ -122,7 +122,8 @@ body {
     transition: transform 0.5s;
 }
 
-.gallery-card:hover .gallery-card-inner {
+.gallery-card:hover .gallery-card-inner,
+.gallery-card.active .gallery-card-inner {
     transform: rotateY(180deg);
 }
 
