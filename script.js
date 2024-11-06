@@ -86,15 +86,15 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryGrid.scrollLeft = scrollLeft - walk;
     });
 
-    // Bounce Effect on Hover for gallery cards
-    const allCards = galleryGrid.querySelectorAll('.gallery-card');
+    // Toggle card flip on click
     allCards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            card.style.transform = 'scale(1.05)';
-            card.style.transition = 'transform 0.3s ease';
-        });
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'scale(1)';
+        card.addEventListener('click', () => {
+            const inner = card.querySelector('.gallery-card-inner');
+            if (inner.style.transform === 'rotateY(180deg)') {
+                inner.style.transform = 'rotateY(0deg)';
+            } else {
+                inner.style.transform = 'rotateY(180deg)';
+            }
         });
     });
 
