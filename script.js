@@ -2,11 +2,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const galleryGrid = document.querySelector('.gallery-grid');
     const galleryCards = Array.from(galleryGrid.children);
     const cardWidth = galleryCards[0].offsetWidth + 20; // Card width + margin
+    let isDragging = false;
     let startX = 0;
     let scrollLeft = 0;
-    let isDragging = false;
 
-    // Duplicate cards for infinite effect
+    // Duplicate cards to create the seamless effect, keeping visible cards consistent
     galleryCards.forEach(card => {
         const cloneStart = card.cloneNode(true);
         const cloneEnd = card.cloneNode(true);
@@ -14,23 +14,23 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryGrid.insertBefore(cloneStart, galleryGrid.firstChild); // Prepend clone to the start
     });
 
-    // Set initial scroll position to the middle
+    // Set initial scroll position to the starting center for a continuous scroll illusion
     galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
 
-    // Update scroll to create seamless loop
-    function updateLoopScroll() {
+    // Function to seamlessly loop the scroll position without snapping back
+    function seamlessLoop() {
         const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
         if (galleryGrid.scrollLeft <= 0) {
-            galleryGrid.scrollLeft = maxScrollLeft / 2 - cardWidth;
+            galleryGrid.scrollLeft = maxScrollLeft - galleryGrid.clientWidth;
         } else if (galleryGrid.scrollLeft >= maxScrollLeft) {
-            galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
+            galleryGrid.scrollLeft = galleryGrid.clientWidth;
         }
     }
 
-    // Event listener to continuously check and adjust for infinite scroll
-    galleryGrid.addEventListener('scroll', updateLoopScroll);
+    // Add the scroll listener for looping
+    galleryGrid.addEventListener('scroll', seamlessLoop);
 
-    // Arrow navigation
+    // Arrow navigation for scrolling
     document.querySelector('.right-arrow').addEventListener('click', () => {
         galleryGrid.scrollBy({
             left: cardWidth,
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isDragging) return;
         e.preventDefault();
         const x = e.pageX - galleryGrid.offsetLeft;
-        const walk = (x - startX) * 1.5; // Adjust scroll speed
+        const walk = (x - startX) * 1.5;
         galleryGrid.scrollLeft = scrollLeft - walk;
     });
 
@@ -82,23 +82,19 @@ document.addEventListener('DOMContentLoaded', () => {
     galleryGrid.addEventListener('touchmove', (e) => {
         if (!isDragging) return;
         const x = e.touches[0].pageX - galleryGrid.offsetLeft;
-        const walk = (x - startX) * 1.5; // Adjust scroll speed
+        const walk = (x - startX) * 1.5;
         galleryGrid.scrollLeft = scrollLeft - walk;
     });
 
-    // Toggle card flip on click
+    // Toggle flip on click
     galleryCards.forEach(card => {
         card.addEventListener('click', () => {
             const inner = card.querySelector('.gallery-card-inner');
-            if (inner.style.transform === 'rotateY(180deg)') {
-                inner.style.transform = 'rotateY(0deg)';
-            } else {
-                inner.style.transform = 'rotateY(180deg)';
-            }
+            inner.style.transform = inner.style.transform === 'rotateY(180deg)' ? 'rotateY(0deg)' : 'rotateY(180deg)';
         });
     });
 
-    // Adding "Before" and "After" labels to front and back images
+    // "Before" and "After" labels
     galleryCards.forEach(card => {
         const frontLabel = document.createElement('div');
         frontLabel.className = 'label';
@@ -121,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("bookingModal").style.display = "none";
     });
 
-    // Close modal when clicking outside the content
+    // Close modal when clicking outside
     window.addEventListener("click", function(event) {
         const modal = document.getElementById("bookingModal");
         if (event.target === modal) {
@@ -129,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Header Title Animation on Click
+    // Header Title Animation
     document.getElementById("header-title").addEventListener("click", function() {
         const letters = this.querySelectorAll("span");
         letters.forEach((letter, index) => {
