@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Function to update gallery positioning to create the loop effect
+    // Function to update gallery positioning to create a seamless loop
     function updateLoopScroll() {
         const scrollPosition = galleryGrid.scrollLeft;
         const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
