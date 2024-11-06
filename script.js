@@ -98,6 +98,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Adding "Before" and "After" labels to front and back images
+    allCards.forEach(card => {
+        const frontLabel = document.createElement('div');
+        frontLabel.className = 'label';
+        frontLabel.textContent = 'After';
+        card.querySelector('.gallery-card-front').appendChild(frontLabel);
+
+        const backLabel = document.createElement('div');
+        backLabel.className = 'label';
+        backLabel.textContent = 'Before';
+        card.querySelector('.gallery-card-back').appendChild(backLabel);
+    });
+
     // Booking Modal Open/Close
     document.getElementById("openModalButton").addEventListener("click", function() {
         const bookingUrl = "https://beyondtheblondee.glossgenius.com";
