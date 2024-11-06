@@ -2,45 +2,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const galleryGrid = document.querySelector('.gallery-grid');
     const galleryCards = Array.from(galleryGrid.children);
     const cardWidth = galleryCards[0].offsetWidth + 20; // Card width + margin
-    let isDragging = false;
     let startX = 0;
     let scrollLeft = 0;
+    let isDragging = false;
 
-    // Set up continuous scroll by repositioning cards
-    function setupContinuousLoop() {
-        galleryCards.forEach((card, index) => {
-            card.style.left = `${index * cardWidth}px`;
+    // Function to move the scroll position
+    function smoothScroll(offset) {
+        galleryGrid.scrollBy({
+            left: offset,
+            behavior: 'smooth'
         });
     }
 
-    function handleContinuousScroll() {
-        const scrollPos = galleryGrid.scrollLeft;
-        const maxScroll = galleryGrid.scrollWidth - galleryGrid.clientWidth;
+    // Function to update gallery positioning to create the loop effect
+    function updateLoopScroll() {
+        const scrollPosition = galleryGrid.scrollLeft;
+        const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
 
-        if (scrollPos >= maxScroll) {
-            galleryGrid.scrollLeft = 0; // Reset to start for seamless loop
-        } else if (scrollPos <= 0) {
-            galleryGrid.scrollLeft = maxScroll - cardWidth; // Seamlessly move to end
+        if (scrollPosition <= 0) {
+            galleryGrid.scrollLeft = maxScrollLeft - cardWidth;
+        } else if (scrollPosition >= maxScrollLeft) {
+            galleryGrid.scrollLeft = cardWidth;
         }
     }
 
-    // Initialize continuous loop setup
-    setupContinuousLoop();
+    // Set up automatic scrolling when reaching either end
+    galleryGrid.addEventListener('scroll', updateLoopScroll);
 
     // Arrow navigation
-    document.querySelector('.right-arrow').addEventListener('click', () => {
-        galleryGrid.scrollBy({
-            left: cardWidth,
-            behavior: "smooth"
-        });
-    });
-
-    document.querySelector('.left-arrow').addEventListener('click', () => {
-        galleryGrid.scrollBy({
-            left: -cardWidth,
-            behavior: "smooth"
-        });
-    });
+    document.querySelector('.right-arrow').addEventListener('click', () => smoothScroll(cardWidth));
+    document.querySelector('.left-arrow').addEventListener('click', () => smoothScroll(-cardWidth));
 
     // Dragging for smooth swipe on desktop
     galleryGrid.addEventListener('mousedown', (e) => {
@@ -83,9 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryGrid.scrollLeft = scrollLeft - walk;
     });
 
-    // Event listener for infinite loop
-    galleryGrid.addEventListener('scroll', handleContinuousScroll);
-
     // Bounce Effect on Hover for gallery cards
     const allCards = galleryGrid.querySelectorAll('.gallery-card');
     allCards.forEach(card => {
@@ -98,19 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Booking Modal - Opens booking page in a new tab and shows modal
+    // Booking Modal Open/Close
     document.getElementById("openModalButton").addEventListener("click", function() {
         const bookingUrl = "https://beyondtheblondee.glossgenius.com";
         window.open(bookingUrl, '_blank');
-
-        const modal = document.getElementById("bookingModal");
-        modal.style.display = "flex";
-        setTimeout(() => {
-            modal.style.display = "none";
-        }, 3000);
     });
 
-    // Close modal manually
     document.getElementById("closeModalButton").addEventListener("click", function() {
         document.getElementById("bookingModal").style.display = "none";
     });
