@@ -6,28 +6,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let scrollLeft = 0;
 
-    // Function to append the first card to the end for infinite scrolling illusion
-    function moveFirstCardToEnd() {
-        const firstCard = galleryGrid.firstElementChild;
-        galleryGrid.appendChild(firstCard);
-        galleryGrid.scrollLeft -= cardWidth;
-    }
+    // Set initial scroll position to center
+    galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
 
-    // Function to prepend the last card to the start for infinite scrolling illusion
-    function moveLastCardToStart() {
-        const lastCard = galleryGrid.lastElementChild;
-        galleryGrid.prepend(lastCard);
-        galleryGrid.scrollLeft += cardWidth;
-    }
-
-    // Monitor scroll to create seamless looping
-    galleryGrid.addEventListener('scroll', () => {
-        if (galleryGrid.scrollLeft >= galleryGrid.scrollWidth - galleryGrid.clientWidth - cardWidth) {
-            moveFirstCardToEnd();
-        } else if (galleryGrid.scrollLeft <= cardWidth) {
-            moveLastCardToStart();
+    // Function to reset the position of the cards to create an endless scroll illusion
+    function updateInfiniteScroll() {
+        const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
+        
+        if (galleryGrid.scrollLeft <= 0) {
+            galleryGrid.scrollLeft = maxScrollLeft / 2;
+        } else if (galleryGrid.scrollLeft >= maxScrollLeft) {
+            galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
         }
-    });
+    }
+
+    // Scroll event listener for seamless looping
+    galleryGrid.addEventListener('scroll', updateInfiniteScroll);
 
     // Arrow navigation for scrolling
     document.querySelector('.right-arrow').addEventListener('click', () => {
