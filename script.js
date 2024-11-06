@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let scrollLeft = 0;
 
-    // Duplicate cards to create the seamless effect, keeping visible cards consistent
+    // Duplicate cards to create the seamless rotation effect
     galleryCards.forEach(card => {
         const cloneStart = card.cloneNode(true);
         const cloneEnd = card.cloneNode(true);
@@ -14,23 +14,23 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryGrid.insertBefore(cloneStart, galleryGrid.firstChild); // Prepend clone to the start
     });
 
-    // Set initial scroll position to the starting center for a continuous scroll illusion
+    // Set initial scroll position to the middle to create an infinite scroll illusion
     galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
 
-    // Function to seamlessly loop the scroll position without snapping back
+    // Function to create a seamless loop effect
     function seamlessLoop() {
         const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
         if (galleryGrid.scrollLeft <= 0) {
-            galleryGrid.scrollLeft = maxScrollLeft - galleryGrid.clientWidth;
+            galleryGrid.scrollLeft = maxScrollLeft / 2;
         } else if (galleryGrid.scrollLeft >= maxScrollLeft) {
-            galleryGrid.scrollLeft = galleryGrid.clientWidth;
+            galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
         }
     }
 
-    // Add the scroll listener for looping
+    // Continuously adjust scroll position for seamless looping
     galleryGrid.addEventListener('scroll', seamlessLoop);
 
-    // Arrow navigation for scrolling
+    // Arrow navigation
     document.querySelector('.right-arrow').addEventListener('click', () => {
         galleryGrid.scrollBy({
             left: cardWidth,
