@@ -94,19 +94,19 @@ body {
 
 .gallery-grid {
     display: flex;
-    overflow-x: hidden;
+    overflow-x: scroll;
     gap: 20px;
-    padding: 20px 5%; /* Full-width padding */
-    width: 100vw; /* Full width */
+    padding: 20px 5%;
+    width: 100%;
     scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
+    white-space: nowrap;
 }
 
 .gallery-card {
     width: 240px;
     height: 320px;
     perspective: 1000px;
-    position: relative;
+    display: inline-block;
     flex-shrink: 0;
     scroll-snap-align: start;
     transition: transform 0.5s;
