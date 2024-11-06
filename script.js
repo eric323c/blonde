@@ -6,31 +6,30 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let scrollLeft = 0;
 
-    // Duplicate cards to create the seamless rotation effect
-    galleryCards.forEach(card => {
-        const cloneStart = card.cloneNode(true);
-        const cloneEnd = card.cloneNode(true);
-        galleryGrid.appendChild(cloneEnd); // Append clone to the end
-        galleryGrid.insertBefore(cloneStart, galleryGrid.firstChild); // Prepend clone to the start
-    });
-
-    // Set initial scroll position to the middle to create an infinite scroll illusion
-    galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
-
-    // Function to create a seamless loop effect
-    function seamlessLoop() {
-        const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
-        if (galleryGrid.scrollLeft <= 0) {
-            galleryGrid.scrollLeft = maxScrollLeft / 2;
-        } else if (galleryGrid.scrollLeft >= maxScrollLeft) {
-            galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
-        }
+    // Function to append the first card to the end for infinite scrolling illusion
+    function moveFirstCardToEnd() {
+        const firstCard = galleryGrid.firstElementChild;
+        galleryGrid.appendChild(firstCard);
+        galleryGrid.scrollLeft -= cardWidth;
     }
 
-    // Continuously adjust scroll position for seamless looping
-    galleryGrid.addEventListener('scroll', seamlessLoop);
+    // Function to prepend the last card to the start for infinite scrolling illusion
+    function moveLastCardToStart() {
+        const lastCard = galleryGrid.lastElementChild;
+        galleryGrid.prepend(lastCard);
+        galleryGrid.scrollLeft += cardWidth;
+    }
 
-    // Arrow navigation
+    // Monitor scroll to create seamless looping
+    galleryGrid.addEventListener('scroll', () => {
+        if (galleryGrid.scrollLeft >= galleryGrid.scrollWidth - galleryGrid.clientWidth - cardWidth) {
+            moveFirstCardToEnd();
+        } else if (galleryGrid.scrollLeft <= cardWidth) {
+            moveLastCardToStart();
+        }
+    });
+
+    // Arrow navigation for scrolling
     document.querySelector('.right-arrow').addEventListener('click', () => {
         galleryGrid.scrollBy({
             left: cardWidth,
