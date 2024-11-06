@@ -6,22 +6,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let scrollLeft = 0;
 
-    // Set initial scroll position to center
+    // Set initial scroll position to the starting center for a continuous scroll illusion
     galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
 
-    // Function to reset the position of the cards to create an endless scroll illusion
-    function updateInfiniteScroll() {
+    // Infinite loop function to reposition cards
+    function seamlessLoop() {
         const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
-        
+
         if (galleryGrid.scrollLeft <= 0) {
-            galleryGrid.scrollLeft = maxScrollLeft / 2;
+            galleryGrid.scrollLeft = maxScrollLeft - galleryGrid.clientWidth;
         } else if (galleryGrid.scrollLeft >= maxScrollLeft) {
-            galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
+            galleryGrid.scrollLeft = galleryGrid.clientWidth;
         }
     }
 
-    // Scroll event listener for seamless looping
-    galleryGrid.addEventListener('scroll', updateInfiniteScroll);
+    // Add scroll listener for infinite effect
+    galleryGrid.addEventListener('scroll', seamlessLoop);
 
     // Arrow navigation for scrolling
     document.querySelector('.right-arrow').addEventListener('click', () => {
@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // "Before" and "After" labels
+    // Adding "Before" and "After" labels
     galleryCards.forEach(card => {
         const frontLabel = document.createElement('div');
         frontLabel.className = 'label';
