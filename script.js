@@ -6,34 +6,36 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let scrollLeft = 0;
 
-    // Clone cards at the beginning and end for smooth infinite scrolling
+    // Clone cards at the beginning and end for seamless scrolling
     galleryCards.forEach(card => {
         const cloneBefore = card.cloneNode(true);
         const cloneAfter = card.cloneNode(true);
-        galleryGrid.appendChild(cloneAfter); // Clone at the end
-        galleryGrid.insertBefore(cloneBefore, galleryGrid.firstChild); // Clone at the beginning
+        galleryGrid.appendChild(cloneAfter);
+        galleryGrid.insertBefore(cloneBefore, galleryGrid.firstChild);
     });
 
-    // Set the initial scroll position to the center for a seamless scroll effect
-    const initialPosition = galleryGrid.scrollWidth / 2;
-    galleryGrid.scrollLeft = initialPosition;
+    // Calculate center position (where actual cards start)
+    const totalWidth = galleryGrid.scrollWidth;
+    const centerPosition = (totalWidth - galleryGrid.clientWidth) / 2;
+    galleryGrid.scrollLeft = centerPosition;
 
-    // Infinite scroll function to reset position seamlessly
+    // Infinite scroll function
     function infiniteLoop() {
         const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
-        
-        // Check if scrolling left or right has reached the cloned areas
-        if (galleryGrid.scrollLeft <= cardWidth) {
-            galleryGrid.scrollLeft = maxScrollLeft / 2;
-        } else if (galleryGrid.scrollLeft >= maxScrollLeft - cardWidth) {
-            galleryGrid.scrollLeft = initialPosition;
+
+        if (galleryGrid.scrollLeft < cardWidth) {
+            // If scrolling too far left, reset to near the end
+            galleryGrid.scrollLeft = maxScrollLeft - (cardWidth * galleryCards.length);
+        } else if (galleryGrid.scrollLeft > maxScrollLeft - cardWidth * galleryCards.length) {
+            // If scrolling too far right, reset to near the start
+            galleryGrid.scrollLeft = cardWidth * galleryCards.length;
         }
     }
 
-    // Attach scroll event listener to handle infinite scrolling
+    // Attach scroll listener
     galleryGrid.addEventListener('scroll', infiniteLoop);
 
-    // Right and Left arrow navigation for smooth scrolling
+    // Right and Left arrow navigation
     document.querySelector('.right-arrow').addEventListener('click', () => {
         galleryGrid.scrollBy({ left: cardWidth, behavior: 'smooth' });
     });
@@ -56,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isDragging) return;
         e.preventDefault();
         const x = e.pageX - galleryGrid.offsetLeft;
-        const walk = (x - startX) * 1.5; // Adjust scroll speed if necessary
+        const walk = (x - startX) * 1.5;
         galleryGrid.scrollLeft = scrollLeft - walk;
     });
 
