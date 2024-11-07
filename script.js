@@ -14,25 +14,28 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryGrid.insertBefore(cloneBefore, galleryGrid.firstChild);
     });
 
-    // Calculate initial scroll position (centered within the clones)
+    // Set initial scroll position to center for a seamless scrolling effect
     const centerPosition = (galleryGrid.scrollWidth - galleryGrid.clientWidth) / 2;
     galleryGrid.scrollLeft = centerPosition;
 
-    // Infinite loop function to reset the scroll position seamlessly
+    // Infinite loop function to adjust the scroll position without snapping back
     function infiniteLoop() {
         const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
+        const centerOffset = galleryGrid.scrollWidth / 2;
 
-        if (galleryGrid.scrollLeft <= 0) {
-            galleryGrid.scrollLeft = maxScrollLeft - galleryGrid.clientWidth;
-        } else if (galleryGrid.scrollLeft >= maxScrollLeft) {
-            galleryGrid.scrollLeft = galleryGrid.clientWidth;
+        if (galleryGrid.scrollLeft < cardWidth) {
+            // When scrolling too far to the left, reset position to the right side near the center
+            galleryGrid.scrollLeft = galleryGrid.scrollLeft + centerOffset;
+        } else if (galleryGrid.scrollLeft > maxScrollLeft - cardWidth) {
+            // When scrolling too far to the right, reset position to the left side near the center
+            galleryGrid.scrollLeft = galleryGrid.scrollLeft - centerOffset;
         }
     }
 
-    // Attach scroll event listener to maintain infinite scrolling
+    // Attach scroll event listener to handle seamless infinite scrolling
     galleryGrid.addEventListener('scroll', infiniteLoop);
 
-    // Arrow navigation functionality
+    // Arrow navigation
     document.querySelector('.right-arrow').addEventListener('click', () => {
         galleryGrid.scrollBy({ left: cardWidth, behavior: 'smooth' });
     });
@@ -41,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryGrid.scrollBy({ left: -cardWidth, behavior: 'smooth' });
     });
 
-    // Dragging functionality for desktop users
+    // Dragging functionality for desktop
     galleryGrid.addEventListener('mousedown', (e) => {
         isDragging = true;
         startX = e.pageX - galleryGrid.offsetLeft;
