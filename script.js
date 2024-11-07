@@ -6,19 +6,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let scrollLeft = 0;
 
-    // Clone cards for smoother looping effect
+    // Clone cards at the beginning and end for smooth infinite scrolling
     galleryCards.forEach(card => {
-        const clone = card.cloneNode(true);
-        galleryGrid.appendChild(clone);
+        const cloneBefore = card.cloneNode(true);
+        const cloneAfter = card.cloneNode(true);
+        galleryGrid.appendChild(cloneAfter); // Clone at the end
+        galleryGrid.insertBefore(cloneBefore, galleryGrid.firstChild); // Clone at the beginning
     });
 
-    // Set initial scroll position
+    // Set the initial scroll position to the center for a seamless scroll effect
     galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
 
-    // Infinite loop functionality without snapping back
+    // Infinite scroll function to reset position seamlessly
     function infiniteLoop() {
         const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
-        
+
         if (galleryGrid.scrollLeft <= 0) {
             galleryGrid.scrollLeft = maxScrollLeft / 2;
         } else if (galleryGrid.scrollLeft >= maxScrollLeft) {
@@ -26,10 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Event listener for smooth looping effect
+    // Attach scroll event listener to handle infinite scrolling
     galleryGrid.addEventListener('scroll', infiniteLoop);
 
-    // Arrow navigation
+    // Right and Left arrow navigation for smooth scrolling
     document.querySelector('.right-arrow').addEventListener('click', () => {
         galleryGrid.scrollBy({ left: cardWidth, behavior: 'smooth' });
     });
@@ -38,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryGrid.scrollBy({ left: -cardWidth, behavior: 'smooth' });
     });
 
-    // Dragging functionality for desktop
+    // Dragging functionality for desktop users
     galleryGrid.addEventListener('mousedown', (e) => {
         isDragging = true;
         startX = e.pageX - galleryGrid.offsetLeft;
@@ -52,11 +54,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isDragging) return;
         e.preventDefault();
         const x = e.pageX - galleryGrid.offsetLeft;
-        const walk = (x - startX) * 1.5;
+        const walk = (x - startX) * 1.5; // Adjust scroll speed if necessary
         galleryGrid.scrollLeft = scrollLeft - walk;
     });
 
-    // Touch events for mobile
+    // Touch events for mobile scrolling
     galleryGrid.addEventListener('touchstart', (e) => {
         isDragging = true;
         startX = e.touches[0].pageX - galleryGrid.offsetLeft;
@@ -80,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // "Before" and "After" labels
+    // Add "Before" and "After" labels
     galleryCards.forEach(card => {
         const frontLabel = document.createElement('div');
         frontLabel.className = 'label';
@@ -93,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
         card.querySelector('.gallery-card-back').appendChild(backLabel);
     });
 
-    // Booking Modal Open/Close
+    // Booking Modal Open/Close functionality
     document.getElementById("openModalButton").addEventListener("click", function() {
         const bookingUrl = "https://beyondtheblondee.glossgenius.com";
         window.open(bookingUrl, '_blank');
@@ -103,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById("bookingModal").style.display = "none";
     });
 
-    // Close modal when clicking outside
+    // Close modal when clicking outside the modal content
     window.addEventListener("click", function(event) {
         const modal = document.getElementById("bookingModal");
         if (event.target === modal) {
@@ -111,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Header Title Animation
+    // Header Title Animation on click
     document.getElementById("header-title").addEventListener("click", function() {
         const letters = this.querySelectorAll("span");
         letters.forEach((letter, index) => {
@@ -122,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Smooth Scroll for Mid Links
+    // Smooth scrolling for navigation links
     document.querySelectorAll('.mid-links .link').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
