@@ -37,7 +37,7 @@ body {
     margin-top: 80px;
     height: 70vh;
     background: url('salon.jpg') no-repeat center center/cover;
-    background-position-y: 20%; /* Adjust Y-position */
+    background-position-y: 20%;
     box-shadow: inset 0px 8px 15px rgba(0, 0, 0, 0.2), inset 0px -8px 15px rgba(0, 0, 0, 0.2);
     position: relative;
     z-index: 1;
@@ -92,26 +92,26 @@ body {
     text-align: center;
 }
 
-.gallery-grid {
-    display: flex;
-    overflow-x: scroll;
-    gap: 20px;
-    padding: 20px 5%;
+.carousel-container {
+    overflow: hidden;
     width: 100%;
-    scroll-behavior: smooth;
-    white-space: nowrap;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.5s ease;
 }
 
 .gallery-card {
     width: 240px;
     height: 320px;
     perspective: 1000px;
-    display: inline-block;
     flex-shrink: 0;
+    position: relative;
     scroll-snap-align: start;
     transition: transform 0.5s;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
-    position: relative;
+    display: inline-block;
 }
 
 .gallery-card-inner {
@@ -188,10 +188,10 @@ body {
 }
 
 /* Hide scrollbar */
-.gallery-grid::-webkit-scrollbar {
+.carousel-track::-webkit-scrollbar {
     display: none;
 }
-.gallery-grid {
+.carousel-track {
     -ms-overflow-style: none;
     scrollbar-width: none;
 }
