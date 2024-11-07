@@ -85,6 +85,7 @@ body {
 }
 
 /* Gallery Section */
+/* Gallery Section */
 .gallery-section {
     position: relative;
     overflow: hidden;
@@ -92,26 +93,26 @@ body {
     text-align: center;
 }
 
-.carousel-container {
-    overflow: hidden;
-    width: 100%;
-}
-
-.carousel-track {
+.gallery-grid {
     display: flex;
-    transition: transform 0.5s ease;
+    gap: 20px;
+    padding: 20px 0;
+    width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    white-space: nowrap;
 }
 
 .gallery-card {
     width: 240px;
     height: 320px;
     perspective: 1000px;
+    display: inline-block;
     flex-shrink: 0;
-    position: relative;
     scroll-snap-align: start;
     transition: transform 0.5s;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.15);
-    display: inline-block;
+    position: relative;
 }
 
 .gallery-card-inner {
@@ -188,12 +189,8 @@ body {
 }
 
 /* Hide scrollbar */
-.carousel-track::-webkit-scrollbar {
+.gallery-grid::-webkit-scrollbar {
     display: none;
-}
-.carousel-track {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
 }
 
 /* Booking Section */
