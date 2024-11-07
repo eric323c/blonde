@@ -14,28 +14,25 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryGrid.insertBefore(cloneBefore, galleryGrid.firstChild);
     });
 
-    // Calculate center position (where actual cards start)
-    const totalWidth = galleryGrid.scrollWidth;
-    const centerPosition = (totalWidth - galleryGrid.clientWidth) / 2;
+    // Calculate initial scroll position (centered within the clones)
+    const centerPosition = (galleryGrid.scrollWidth - galleryGrid.clientWidth) / 2;
     galleryGrid.scrollLeft = centerPosition;
 
-    // Infinite scroll function
+    // Infinite loop function to reset the scroll position seamlessly
     function infiniteLoop() {
         const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
 
-        if (galleryGrid.scrollLeft < cardWidth) {
-            // If scrolling too far left, reset to near the end
-            galleryGrid.scrollLeft = maxScrollLeft - (cardWidth * galleryCards.length);
-        } else if (galleryGrid.scrollLeft > maxScrollLeft - cardWidth * galleryCards.length) {
-            // If scrolling too far right, reset to near the start
-            galleryGrid.scrollLeft = cardWidth * galleryCards.length;
+        if (galleryGrid.scrollLeft <= 0) {
+            galleryGrid.scrollLeft = maxScrollLeft - galleryGrid.clientWidth;
+        } else if (galleryGrid.scrollLeft >= maxScrollLeft) {
+            galleryGrid.scrollLeft = galleryGrid.clientWidth;
         }
     }
 
-    // Attach scroll listener
+    // Attach scroll event listener to maintain infinite scrolling
     galleryGrid.addEventListener('scroll', infiniteLoop);
 
-    // Right and Left arrow navigation
+    // Arrow navigation functionality
     document.querySelector('.right-arrow').addEventListener('click', () => {
         galleryGrid.scrollBy({ left: cardWidth, behavior: 'smooth' });
     });
@@ -78,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryGrid.scrollLeft = scrollLeft - walk;
     });
 
-    // Toggle flip on click
+    // Toggle flip on click for each card
     galleryCards.forEach(card => {
         card.addEventListener('click', () => {
             const inner = card.querySelector('.gallery-card-inner');
