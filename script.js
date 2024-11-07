@@ -15,16 +15,18 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Set the initial scroll position to the center for a seamless scroll effect
-    galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
+    const initialPosition = galleryGrid.scrollWidth / 2;
+    galleryGrid.scrollLeft = initialPosition;
 
     // Infinite scroll function to reset position seamlessly
     function infiniteLoop() {
         const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
-
-        if (galleryGrid.scrollLeft <= 0) {
+        
+        // Check if scrolling left or right has reached the cloned areas
+        if (galleryGrid.scrollLeft <= cardWidth) {
             galleryGrid.scrollLeft = maxScrollLeft / 2;
-        } else if (galleryGrid.scrollLeft >= maxScrollLeft) {
-            galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
+        } else if (galleryGrid.scrollLeft >= maxScrollLeft - cardWidth) {
+            galleryGrid.scrollLeft = initialPosition;
         }
     }
 
