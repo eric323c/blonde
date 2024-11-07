@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let startX = 0;
     let scrollLeft = 0;
 
-    // Clone cards for smoother looping
+    // Clone cards for smoother looping effect
     galleryCards.forEach(card => {
         const clone = card.cloneNode(true);
         galleryGrid.appendChild(clone);
@@ -15,30 +15,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set initial scroll position
     galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
 
-    // Function to move cards to the end to create the infinite illusion
+    // Infinite loop functionality without snapping back
     function infiniteLoop() {
-        const firstCard = galleryGrid.firstElementChild;
-        const lastCard = galleryGrid.lastElementChild;
+        const maxScrollLeft = galleryGrid.scrollWidth - galleryGrid.clientWidth;
         
         if (galleryGrid.scrollLeft <= 0) {
+            galleryGrid.scrollLeft = maxScrollLeft / 2;
+        } else if (galleryGrid.scrollLeft >= maxScrollLeft) {
             galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2;
-        } else if (galleryGrid.scrollLeft + galleryGrid.clientWidth >= galleryGrid.scrollWidth) {
-            galleryGrid.scrollLeft = galleryGrid.scrollWidth / 2 - galleryGrid.clientWidth;
-        }
-
-        if (galleryGrid.scrollLeft < cardWidth) {
-            galleryGrid.appendChild(firstCard); // Move the first card to the end
-            galleryGrid.scrollLeft += cardWidth;
-        } else if (galleryGrid.scrollLeft + galleryGrid.clientWidth >= galleryGrid.scrollWidth - cardWidth) {
-            galleryGrid.prepend(lastCard); // Move the last card to the beginning
-            galleryGrid.scrollLeft -= cardWidth;
         }
     }
 
-    // Attach scroll listener for continuous loop effect
+    // Event listener for smooth looping effect
     galleryGrid.addEventListener('scroll', infiniteLoop);
 
-    // Arrow navigation for smooth scrolling
+    // Arrow navigation
     document.querySelector('.right-arrow').addEventListener('click', () => {
         galleryGrid.scrollBy({ left: cardWidth, behavior: 'smooth' });
     });
@@ -47,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
         galleryGrid.scrollBy({ left: -cardWidth, behavior: 'smooth' });
     });
 
-    // Dragging functionality
+    // Dragging functionality for desktop
     galleryGrid.addEventListener('mousedown', (e) => {
         isDragging = true;
         startX = e.pageX - galleryGrid.offsetLeft;
@@ -89,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Add "Before" and "After" labels
+    // "Before" and "After" labels
     galleryCards.forEach(card => {
         const frontLabel = document.createElement('div');
         frontLabel.className = 'label';
